@@ -1,6 +1,8 @@
 package com.decorative_accessories.items.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -35,10 +37,19 @@ public class GeckoCurioRenderer<T extends LivingEntity> implements ICurioRendere
             float netHeadYaw,
             float headPitch
         ) {
-        matrixStack.pushPose();
-        matrixStack.translate(0.0D, 0.1D, 0.0D);
-        geoRenderer.renderByItem(stack, null, matrixStack, renderTypeBuffer, light, light);
-        matrixStack.popPose();
+            LivingEntity entity = slotContext.entity();
+            float haedY = entity.getEyeHeight() - (entity.isBaby() ? 0.1F : 0.0F);
+            matrixStack.pushPose();
+            matrixStack.translate(-0.5D, -(haedY - 0.4D), -0.5D);
+            matrixStack.mulPose(Axis.YP.rotationDegrees(netHeadYaw));
+            matrixStack.mulPose(Axis.XP.rotationDegrees(headPitch));
+            // if (entity.isCrouching()) {
+            //     matrixStack.translate(0.0F, 0.15F, 0.0F);
+            // }else if (entity.isSwimming()) {
+            //     matrixStack.translate(0.0F, 0.2F, 0.1F);
+            // }
+            geoRenderer.renderByItem(stack, null, matrixStack, renderTypeBuffer, light, light);
+            matrixStack.popPose();
     }
 
     

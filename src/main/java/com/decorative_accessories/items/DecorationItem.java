@@ -2,28 +2,27 @@ package com.decorative_accessories.items;
 
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
-
 import com.decorative_accessories.items.client.DecorationRenderer;
-
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
+// import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-// import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib.util.RenderUtils;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public class DecorationItem extends Item implements ICurioItem, GeoItem {
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+    // private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     // 构造函数
     public DecorationItem(Properties properties) {
@@ -33,12 +32,14 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem {
     // 核心动画逻辑：定义动画状态机
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, this::animate));
+        controllers.add(new AnimationController<>(this, "controller", 0, this::handleAnimations));
     }
 
-    private <T extends GeoItem> PlayState animate(AnimationState<T> state) {
-        // 播放名为 "idle" 的循环动画
-        state.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation");
+    private <T extends GeoItem> PlayState handleAnimations(AnimationState<T> state) {
+        if (state.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            state.getController().setAnimation(IDLE);
+        }
         return PlayState.CONTINUE;
     }
 

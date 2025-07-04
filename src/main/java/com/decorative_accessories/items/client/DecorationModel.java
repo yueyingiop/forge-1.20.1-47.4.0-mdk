@@ -10,24 +10,17 @@ public class DecorationModel extends GeoModel<DecorationItem> {
 
     @Override
     public ResourceLocation getModelResource(DecorationItem animatable) {
-        // // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'getModelResource'");
-        return new ResourceLocation(decorative_accessories.MODID, "geo/test_decoration.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(decorative_accessories.MODID, "geo/test_decoration.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(DecorationItem animatable) {
-        // // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'getTextureResource'");
-        return new ResourceLocation(decorative_accessories.MODID, "textures/item/test_decoration.png");
+        return ResourceLocation.fromNamespaceAndPath(decorative_accessories.MODID, "textures/item/test_decoration.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(DecorationItem animatable) {
-        // // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'getAnimationResource'");
-        // return new ResourceLocation(decorative_accessories.MODID, "animations/test_decoration.animation.json");
-        return null;
+        return ResourceLocation.fromNamespaceAndPath(decorative_accessories.MODID, "animations/test_decoration.animation.json");
     }
     
 }
