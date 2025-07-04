@@ -1,0 +1,73 @@
+# 这是一个示例 mods.toml 文件。它包含与加载 mod 相关的数据。
+# 有几个必填字段（#mandatory），还有更多可选字段（#optional）。
+# 整体格式为标准 TOML 格式，v0.5.0。
+# 注意此文件中有几个 TOML 列表。
+# 有关 toml 格式的更多信息请参见：https://github.com/toml-lang/toml
+# 要加载的 mod 加载器类型的名称——对于常规 FML @Mod mod 应为 javafml
+modLoader="javafml" #必填
+# 要匹配的 mod 加载器的版本范围——对于常规 FML @Mod，它将是 forge 版本
+loaderVersion="${loader_version_range}" #必填 这个通常会在每个 Minecraft 版本由 Forge 更新。请参见我们的下载页面以获取版本列表。
+# 你的 mod 的许可证。这是必填的元数据，有助于更容易理解你的再分发属性。
+# 请在 https://choosealicense.com/ 查看你的选项。All rights reserved 是默认的版权立场，因此这里也是默认值。
+license="${mod_license}"
+# 当此 mod 出现问题时可供参考的 URL
+#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #可选
+# 如果你的 mod 仅为客户端且没有多人游戏功能（无论是专用服务器还是局域网开放），
+# 设置为 true，Forge 会为你设置正确的 displayTest 并跳过在专用服务器上加载你的 mod。
+#clientSideOnly=true #可选 - 如果缺失则默认为 false
+# mod 列表——此处允许多少由各自的 mod 加载器决定
+[[mods]] #必填
+# mod 的 modid
+modId="${mod_id}" #必填
+# mod 的版本号
+version="${mod_version}" #必填
+# mod 的显示名称
+displayName="${mod_name}" #必填
+# 用于查询此 mod 更新的 URL。参见 JSON 更新规范 https://docs.minecraftforge.net/en/latest/misc/updatechecker/
+#updateJSONURL="https://change.me.example.invalid/updates.json" #可选
+# 在 mod UI 中显示的“主页”URL
+#displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #可选
+# 在 mod JAR 根目录下包含的用于显示的 logo 文件名
+#logoFile="examplemod.png" #可选
+# 在 mod UI 中显示的文本字段
+#credits="" #可选
+# 在 mod UI 中显示的文本字段
+authors="${mod_authors}" #可选
+# Display Test 控制你的 mod 在服务器连接界面中的显示
+# MATCH_VERSION 表示如果客户端和服务器上的版本不同，你的 mod 会导致出现红色 X。这是默认行为，如果你的 mod 有服务器和客户端元素应选择此项。
+# IGNORE_SERVER_VERSION 表示如果你的 mod 仅在服务器上存在而客户端不存在，不会导致红色 X。如果你是服务器专用 mod 应使用此项。
+# IGNORE_ALL_VERSION 表示如果你的 mod 仅在客户端或服务器上存在，不会导致红色 X。这是特殊情况，仅当你的 mod 没有服务器组件时使用。
+# NONE 表示未为你的 mod 设置 display test。你需要自己处理，详见 IExtensionPoint.DisplayTest。你可以用此值定义任何方案。
+# 重要说明：这不是指示你的 mod 加载在哪些环境（CLIENT 或 DEDICATED SERVER）上的指令。你的 mod 应该在任何环境下都能加载（即使什么都不做！）。
+#displayTest="MATCH_VERSION" # 如果未指定，clientSideOnly=false 时默认 MATCH_VERSION，否则 clientSideOnly=true 时默认 IGNORE_ALL_VERSION（#可选）
+
+# mod 的描述文本（多行！）（#必填）
+description='''${mod_description}'''
+# 依赖项——使用 . 表示特定 modid 的依赖。依赖是可选的。
+[[dependencies.${mod_id}]] #可选
+    # 依赖的 modid
+    modId="forge" #必填
+    # 该依赖是否必须存在——如果不是，下面必须指定排序
+    mandatory=true #必填
+    # 依赖的版本范围
+    versionRange="${forge_version_range}" #必填
+    # 依赖的排序关系——如果依赖不是必须的，则需要 BEFORE 或 AFTER
+    # BEFORE - 此 mod 在依赖项之前加载
+    # AFTER - 此 mod 在依赖项之后加载
+    ordering="NONE"
+    # 该依赖应用于的端——BOTH、CLIENT 或 SERVER
+    side="BOTH"
+# 另一个依赖项
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    mandatory=true
+    # 此版本范围声明了当前 minecraft 版本的最小值，直到但不包括下一个主版本
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+# Features 是游戏环境的特定属性，你可能希望声明你需要它们。此示例声明
+# 你的 mod 需要 GL 版本 3.2 或更高。将会添加其他特性。它们是端感知的，因此声明此项不会
+# 阻止你的 mod 在服务器上加载。
+#[features.${mod_id}]
+#openGLVersion="[3.2,)"

@@ -1,0 +1,31 @@
+{
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "java.semanticHighlighting.enabled": true,
+  "files.autoSave": "off",
+  "workbench.startupEditor": "newUntitledFile",
+  "workbench.sideBar.location": "left",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-17",
+      "path": "E:\\jdk"
+    }
+  ],
+  "java.import.generatesMetadataFilesAtProjectRoot": false,
+  "java.refactor.renameFromFileExplorer": "autoApply",
+  "files.autoGuessEncoding": true,
+  "explorer.confirmDelete": false,
+  "window.zoomLevel": 0,
+  "explorer.confirmDragAndDrop": false,
+  "java.jdt.ls.java.home": "E:\\jdk",
+  "workbench.iconTheme": "vscode-icons",
+  "editor.renderControlCharacters": false,
+  "files.exclude": {
+    "**/.project": true,
+    "**/.classpath": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "automatic"
+}
