@@ -10,11 +10,15 @@ import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 @Mod.EventBusSubscriber(modid = "decorative_accessories", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetup {
+    
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
+
+        DecorationRenderer decorationRenderer = new DecorationRenderer();
+
         CuriosRendererRegistry.register(
             RegistryItem.DECORATION_ITEM.get(), 
-            () -> new DecorationRenderer()
+            () -> new GeckoCurioRenderer<>(decorationRenderer)
         );
     }
 }

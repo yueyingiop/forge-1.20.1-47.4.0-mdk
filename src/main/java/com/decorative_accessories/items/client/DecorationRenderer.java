@@ -12,18 +12,8 @@ import software.bernie.geckolib.renderer.GeoItemRenderer;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
-public class DecorationRenderer extends GeoItemRenderer<DecorationItem> implements ICurioRenderer {
+public class DecorationRenderer extends GeoItemRenderer<DecorationItem> {
     public DecorationRenderer() {
         super(new DecorationModel());
     }
-
-    @Override
-    public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext,
-            PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource renderTypeBuffer,
-            int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
-            float headPitch) {
-        // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'render'");
-    }
-
 }
