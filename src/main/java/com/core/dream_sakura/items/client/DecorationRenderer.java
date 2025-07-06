@@ -1,6 +1,6 @@
-package com.decorative_accessories.items.client;
+package com.core.dream_sakura.items.client;
 
-import com.decorative_accessories.items.DecorationItem;
+import com.core.dream_sakura.items.DecorationItem;
 
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 

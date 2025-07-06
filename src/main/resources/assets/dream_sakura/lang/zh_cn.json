@@ -1,0 +1,11 @@
+{
+    "curios.identifier.halo": "光环",
+    "curios.modifiers.halo": "佩戴光环时: ",
+    "itemGroup.dream_sakura_tab": "§e梦之樱",
+
+    "tooltip.dream_sakura.shift_prompt": "按住 %s 查看详情",
+    "item.dream_sakura.dream_finale": "梦幻终序",
+    "tooltip.dream_sakura.dream_finale.base": "至此，新序诞生",
+    "tooltip.dream_sakura.dream_finale.line1": "在黑暗的世界里弱小是无法生存的,如果无法做出改变，",
+    "tooltip.dream_sakura.dream_finale.line2": "那么这力量将会引领新序，这力量将会使欺弱者感到空前绝后的恐惧。"
+}

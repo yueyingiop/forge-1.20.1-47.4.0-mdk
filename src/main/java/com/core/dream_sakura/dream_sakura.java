@@ -1,6 +1,7 @@
-package com.decorative_accessories.decorative_accessories;
+package com.core.dream_sakura;
 
-import com.decorative_accessories.items.RegistryItem;
+import com.core.dream_sakura.items.RegistryItem;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -15,23 +16,23 @@ import net.minecraftforge.registries.RegistryObject;
 import software.bernie.geckolib.GeckoLib;
 
 // 这里的值应与 META-INF/mods.toml 文件中的条目相匹配
-@Mod(decorative_accessories.MODID)
-public class decorative_accessories
+@Mod(dream_sakura.MODID)
+public class dream_sakura
 {
-    public static final String MODID = "decorative_accessories";
+    public static final String MODID = "dream_sakura";
 
     // 注册创造物品栏
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-    public static final RegistryObject<CreativeModeTab> DECORATIVE_ACCESSORIES_TAB = CREATIVE_MODE_TABS.register("decorative_accessories_tab", () -> CreativeModeTab.builder()
+    public static final RegistryObject<CreativeModeTab> DREAM_SAKURA_TAB = CREATIVE_MODE_TABS.register("dream_sakura_tab", () -> CreativeModeTab.builder()
         .withTabsBefore(CreativeModeTabs.COMBAT)
-        .title(Component.translatable("itemGroup.decorative_accessories_tab"))
-        .icon(() -> RegistryItem.DECORATION_ITEM.get().getDefaultInstance())
+        .title(Component.translatable("itemGroup.dream_sakura_tab"))
+        .icon(() -> RegistryItem.DREAM_FINALE.get().getDefaultInstance())
         .displayItems((parameters, output) -> {
-            output.accept(RegistryItem.DECORATION_ITEM.get());
+            output.accept(RegistryItem.DREAM_FINALE.get());
         }).build()
     );
 
-    public decorative_accessories(FMLJavaModLoadingContext context)
+    public dream_sakura(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
 

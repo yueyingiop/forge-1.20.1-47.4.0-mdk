@@ -1,5 +1,10 @@
-package com.decorative_accessories.items.client;
+package com.core.dream_sakura.items.client;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.joml.Math;
+
+import com.core.dream_sakura.dream_sakura;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
@@ -14,6 +19,7 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class GeckoCurioRenderer<T extends LivingEntity> implements ICurioRenderer {
     private final GeoItemRenderer<?> geoRenderer;
+    public static final Logger LOGGER = LogManager.getLogger(dream_sakura.MODID);
 
     public GeckoCurioRenderer(GeoItemRenderer<?> geoRenderer) {
         this.geoRenderer = geoRenderer;
@@ -21,13 +27,13 @@ public class GeckoCurioRenderer<T extends LivingEntity> implements ICurioRendere
 
     @Override
     public <
-        T extends LivingEntity, 
-        M extends EntityModel<T>
+        L extends LivingEntity, 
+        M extends EntityModel<L>
     > void render(
             ItemStack stack, 
             SlotContext slotContext,
             PoseStack matrixStack, 
-            RenderLayerParent<T, M> renderLayerParent, 
+            RenderLayerParent<L, M> renderLayerParent, 
             MultiBufferSource renderTypeBuffer,
             int light, 
             float limbSwing, 
@@ -37,17 +43,21 @@ public class GeckoCurioRenderer<T extends LivingEntity> implements ICurioRendere
             float netHeadYaw,
             float headPitch
         ) {
-            LivingEntity entity = slotContext.entity();
-            float haedY = entity.getEyeHeight() - (entity.isBaby() ? 0.1F : 0.0F);
+            // LivingEntity entity = slotContext.entity();
+            // float haedY = entity.getEyeHeight() - (entity.isBaby() ? 0.1F : 0.0F);
             matrixStack.pushPose();
-            matrixStack.translate(-0.5D, -(haedY - 0.4D), -0.5D);
-            matrixStack.mulPose(Axis.YP.rotationDegrees(netHeadYaw));
-            matrixStack.mulPose(Axis.XP.rotationDegrees(headPitch));
-            // if (entity.isCrouching()) {
-            //     matrixStack.translate(0.0F, 0.15F, 0.0F);
-            // }else if (entity.isSwimming()) {
-            //     matrixStack.translate(0.0F, 0.2F, 0.1F);
-            // }
+            matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
+            matrixStack.mulPose(Axis.XP.rotationDegrees(-45.0F));
+            matrixStack.mulPose(Axis.ZP.rotationDegrees(-45.0F));
+            matrixStack.translate(-0.55D, 0.1D, -0.2D);
+
+            // 头部追踪(算不明白了)
+            // Double h = 0.28D;
+            // matrixStack.translate(-h * Math.sin((90.0F - headPitch) * RAD) * Math.cos(netHeadYaw * RAD), -h * Math.cos(headPitch*RAD), -h * Math.sin((90.0F - headPitch) * RAD) * Math.sin(netHeadYaw * RAD));
+            // matrixStack.mulPose(Axis.YP.rotationDegrees(netHeadYaw));
+            // matrixStack.mulPose(Axis.XP.rotationDegrees(headPitch));
+            // LOGGER.info(netHeadYaw+","+headPitch);
+
             geoRenderer.renderByItem(stack, null, matrixStack, renderTypeBuffer, light, light);
             matrixStack.popPose();
     }

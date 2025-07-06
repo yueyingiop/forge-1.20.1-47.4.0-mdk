@@ -1,7 +1,7 @@
 {
   "parent": "builtin/entity",
   "textures": {
-    "layer0": "decorative_accessories:item/test_decoration"
+    "layer0": "dream_sakura:item/dream_finale"
   },
   "display": {
     "gui": {
