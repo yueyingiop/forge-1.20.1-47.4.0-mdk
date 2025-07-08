@@ -1,6 +1,8 @@
 package com.core.dream_sakura.items.client;
 
+import com.core.dream_sakura.dream_sakura;
 import com.core.dream_sakura.items.RegistryItem;
+// import com.core.dream_sakura.shader.GlowShaderManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -8,7 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
-@Mod.EventBusSubscriber(modid = "dream_sakura", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = dream_sakura.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetup {
     
     @SubscribeEvent
@@ -20,5 +22,10 @@ public class ClientSetup {
             RegistryItem.DREAM_FINALE.get(), 
             () -> new GeckoCurioRenderer<>(decorationRenderer)
         );
+        CuriosRendererRegistry.register(
+            RegistryItem.BASIC_HALO.get(), 
+            () -> new GeckoCurioRenderer<>(decorationRenderer)
+        );
     }
+
 }

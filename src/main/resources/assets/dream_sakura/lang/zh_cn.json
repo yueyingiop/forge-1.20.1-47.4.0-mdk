@@ -7,5 +7,9 @@
     "item.dream_sakura.dream_finale": "梦幻终序",
     "tooltip.dream_sakura.dream_finale.base": "至此，新序诞生",
     "tooltip.dream_sakura.dream_finale.line1": "在黑暗的世界里弱小是无法生存的,如果无法做出改变，",
-    "tooltip.dream_sakura.dream_finale.line2": "那么这力量将会引领新序，这力量将会使欺弱者感到空前绝后的恐惧。"
+    "tooltip.dream_sakura.dream_finale.line2": "那么这力量将会引领新序，这力量将会使欺弱者感到空前绝后的恐惧。",
+    
+    "item.dream_sakura.basic_halo": "基础光环",
+    "tooltip.dream_sakura.basic_halo.base": "这是一个普普通通最基础的光环",
+    "tooltip.dream_sakura.basic_halo.line1": "它普通到甚至不能给你提供任何属性或效果。"
 }

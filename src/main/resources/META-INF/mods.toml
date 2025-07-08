@@ -9,7 +9,7 @@ displayName="梦之樱"  # mod显示名称,必填
 # logoFile="pack.png"  # mod图标,选填
 authors="yueyingiop"  # mod作者,选填
 description='''
-只提供装饰性饰品,饰品不提供任何功能和属性
+至此，新序诞生
 '''  # mod描述,必填
 
 [[dependencies.dream_sakura]]  # mod依赖,选填

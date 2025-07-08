@@ -10,17 +10,20 @@ public class DecorationModel extends GeoModel<DecorationItem> {
 
     @Override
     public ResourceLocation getModelResource(DecorationItem animatable) {
-        return ResourceLocation.fromNamespaceAndPath(dream_sakura.MODID, "geo/dream_finale.geo.json");
+        String itemId = animatable.getItemId();
+        return ResourceLocation.fromNamespaceAndPath(dream_sakura.MODID, "geo/"+itemId+".geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(DecorationItem animatable) {
-        return ResourceLocation.fromNamespaceAndPath(dream_sakura.MODID, "textures/item/dream_finale.png");
+        String itemId = animatable.getItemId();
+        return ResourceLocation.fromNamespaceAndPath(dream_sakura.MODID, "textures/item/"+itemId+".png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(DecorationItem animatable) {
-        return ResourceLocation.fromNamespaceAndPath(dream_sakura.MODID, "animations/dream_finale.animation.json");
+        String itemId = animatable.getItemId();
+        return ResourceLocation.fromNamespaceAndPath(dream_sakura.MODID, "animations/"+itemId+".animation.json");
     }
     
 }

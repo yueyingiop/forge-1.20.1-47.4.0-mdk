@@ -1,5 +1,8 @@
 package com.core.dream_sakura;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.core.dream_sakura.items.RegistryItem;
 
 import net.minecraft.core.registries.Registries;
@@ -20,6 +23,7 @@ import software.bernie.geckolib.GeckoLib;
 public class dream_sakura
 {
     public static final String MODID = "dream_sakura";
+    public static final Logger LOGGER = LogManager.getLogger(dream_sakura.MODID); // 日志记录器
 
     // 注册创造物品栏
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
@@ -29,6 +33,7 @@ public class dream_sakura
         .icon(() -> RegistryItem.DREAM_FINALE.get().getDefaultInstance())
         .displayItems((parameters, output) -> {
             output.accept(RegistryItem.DREAM_FINALE.get());
+            output.accept(RegistryItem.BASIC_HALO.get());
         }).build()
     );
 
