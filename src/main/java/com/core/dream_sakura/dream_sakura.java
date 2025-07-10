@@ -3,6 +3,7 @@ package com.core.dream_sakura;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.core.dream_sakura.blocks.RegistryBlock;
 import com.core.dream_sakura.items.RegistryItem;
 
 import net.minecraft.core.registries.Registries;
@@ -43,9 +44,12 @@ public class dream_sakura
 
         CREATIVE_MODE_TABS.register(modEventBus);
         RegistryItem.ITEMS.register(modEventBus);
+        RegistryBlock.BLOCKS.register(modEventBus);
 
         // 注册自身到服务器和其他感兴趣的游戏事件
         MinecraftForge.EVENT_BUS.register(this);
+        // MinecraftForge.EVENT_BUS.register(SkillBinding.class);
+        // MinecraftForge.EVENT_BUS.register(SkillRegistry.class);
 
         // 注册我们 mod 的 ForgeConfigSpec，以便 Forge 能为我们创建和加载配置文件
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);

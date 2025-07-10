@@ -14,6 +14,8 @@ import com.core.dream_sakura.enums.DamageType;
 import com.core.dream_sakura.items.client.DecorationRenderer;
 import com.core.dream_sakura.items.client.IGlowingItem;
 import com.core.dream_sakura.listener.IDamageImmunity;
+import com.core.dream_sakura.skill.SkillBinding;
+import com.core.dream_sakura.skill.SkillRegistry;
 import com.core.dream_sakura.tooltip.TooltipHelper;
 
 import net.minecraft.network.chat.Component;
@@ -41,6 +43,8 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     private final BiConsumer<SlotContext, ItemStack> curioEquipCallback;
     private final Function<ItemStack, Set<DamageType>> immunityProvider;
     private final float[] glowColor; // 发光颜色
+    private final List<Integer> tooltipColor; // 工具提示颜色列表
+    private final SkillBinding skillBinding; // 技能绑定
 
 
     /**
@@ -50,13 +54,16 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
      * @param curioTickCallback - 装备时的tick回调函数
      * @param immunityProvider - 伤害免疫提供者
      * @param glowColor - 发光颜色，RGB数组
+     * @param tooltipColor - 工具提示颜色，RGB数组
     */ 
     public DecorationItem(
         String itemIDString ,
         Properties properties, 
         BiConsumer<SlotContext, ItemStack> curioTickCallback,
         Function<ItemStack, Set<DamageType>> immunityProvider,
-        float[] glowColor
+        float[] glowColor,
+        List<Integer> tooltipColor,
+        SkillBinding skillBinding
         )
     {
         super(properties.stacksTo(1));
@@ -64,20 +71,87 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         this.curioEquipCallback = curioTickCallback; // 设置装备时的tick回调函数
         this.immunityProvider = immunityProvider; // 设置伤害免疫提供者
         this.glowColor = glowColor != null ? glowColor : new float[]{1.0f, 0.84f, 0.0f}; // 默认金色
+        this.tooltipColor = tooltipColor != null ? tooltipColor : Collections.emptyList(); // 默认空颜色列表
+        this.skillBinding = skillBinding;
+
+        SkillRegistry.registerBinding(this.skillBinding);  // 注册技能绑定
     }
 
-    // 重载构造函数，默认免疫提供者为空
+    /**
+     * 重载构造函数
+     * - 用于只提供回调函数
+     * @param itemIDString - 物品ID字符串
+     * @param properties - 物品属性
+     * @param curioTickCallback - 装备时的tick回调函数
+    */ 
     public DecorationItem(String itemIDString, Properties properties, 
                          BiConsumer<SlotContext, ItemStack> curioTickCallback) {
-        this(itemIDString, properties, curioTickCallback, stack -> Collections.emptySet(), new float[]{1.0f, 0.84f, 0.0f});
+        this(
+            itemIDString, properties, curioTickCallback, 
+            stack -> Collections.emptySet(), 
+            new float[]{1.0f, 0.84f, 0.0f}, 
+            null, null
+        );
     }
 
-    // 重载构造函数，可以指定发光颜色
+    /**
+     * 重载构造函数
+     * - 用于只提供回调函数和发光颜色
+     * @param itemIDString - 物品ID字符串
+     * @param properties - 物品属性
+     * @param curioTickCallback - 装备时的tick回调函数
+     * @param glowColor - 发光颜色，RGB数组
+    */
     public DecorationItem(String itemIDString, Properties properties, 
                          BiConsumer<SlotContext, ItemStack> curioTickCallback,
-                         float[] glowColor) {
-        this(itemIDString, properties, curioTickCallback, stack -> Collections.emptySet(), glowColor);
+                         float[] glowColor, boolean enableLight,int lightLevel) {
+        this(
+            itemIDString, properties, curioTickCallback, 
+            stack -> Collections.emptySet(), 
+            glowColor, null, null
+        );
     }
+
+    /**
+     * 重载构造函数
+     * - 用于只提供回调函数和工具提示颜色
+     * @param itemIDString
+     * @param properties
+     * @param curioTickCallback
+     * @param colorList
+    */
+    public DecorationItem(String itemIDString, Properties properties, 
+                         BiConsumer<SlotContext, ItemStack> curioTickCallback,
+                         List<Integer> colorList){
+        this(
+            itemIDString, properties, curioTickCallback,
+            stack -> Collections.emptySet(), 
+            new float[]{1.0f, 0.84f, 0.0f}, 
+            colorList, 
+            null
+        );
+    }
+
+    /**
+     * 重载构造函数
+     * - 用于只提供回调函数和技能绑定
+     * @param itemIDString
+     * @param properties
+     * @param curioTickCallback
+     * @param skillBinding
+    */
+    public DecorationItem(String itemIDString, Properties properties, 
+                         BiConsumer<SlotContext, ItemStack> curioTickCallback,
+                         SkillBinding skillBinding) {
+        this(
+            itemIDString, properties, curioTickCallback, 
+            stack -> Collections.emptySet(), 
+            new float[]{1.0f, 0.84f, 0.0f}, 
+            null,
+            skillBinding
+        );
+    }
+
 
 
     // 实现IGlowingItem接口
@@ -92,6 +166,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     }
 
 
+
     /**
      * 核心动画逻辑：定义动画状态机
      * - 来自于geckolib
@@ -101,7 +176,6 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, this::handleAnimations));
     }
-
 
     // 创建一个RawAnimation对象，用于定义物品的闲置动画
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation");
@@ -118,8 +192,6 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         }
         return PlayState.CONTINUE;
     }
-
-
     
     @Override
     /**
@@ -131,7 +203,6 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         return cache;
     } 
 
-
     /**
      * 获取当前tick
      * - 来自于geckolib
@@ -142,7 +213,6 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     public double getTick(Object ItemStack) {
         return RenderUtils.getCurrentTick();
     }
-
     
     /**
      * 初始化客户端扩展
@@ -164,6 +234,8 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
 
         });
     }
+
+
 
     /**
      * 判断物品是否可以装备
@@ -188,7 +260,6 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         return true;
     }
 
-
     /**
      * tick事件
      * - 来自Curios API
@@ -204,6 +275,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     }
 
 
+
     /**
      * 添加文本提示
      * - 来自minecraft
@@ -215,8 +287,17 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag){
         super.appendHoverText(stack, level, tooltip, flag);
-        TooltipHelper.addShiftTooltip(itemId, stack, level, tooltip, flag);
+        TooltipHelper.addTooltip(itemId, stack, level, tooltip, flag, tooltipColor);
+        if (this.skillBinding != null) {
+            TooltipHelper.addSkillsDescription(
+                tooltip,
+                this.skillBinding.getDescription(),
+                this.skillBinding.getkeyMapping().get().getKey().getName()
+            );
+        }
     }
+
+
 
     /**
      * 获取物品ID
@@ -237,5 +318,4 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     public Set<DamageType> getImmunities(ItemStack stack) {
         return immunityProvider.apply(stack);
     }
-
 }
