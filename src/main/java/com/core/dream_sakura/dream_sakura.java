@@ -4,7 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.core.dream_sakura.blocks.RegistryBlock;
+import com.core.dream_sakura.blocks.entity.RegistryBlockEntity;
 import com.core.dream_sakura.items.RegistryItem;
+import com.core.dream_sakura.sounds.RegistrySound;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -35,6 +37,8 @@ public class dream_sakura
         .displayItems((parameters, output) -> {
             output.accept(RegistryItem.DREAM_FINALE.get());
             output.accept(RegistryItem.BASIC_HALO.get());
+            output.accept(RegistryItem.CRYSTAL_ITEM.get());
+            output.accept(RegistryItem.TEST_MUSIC_DISC_ITEM.get());
         }).build()
     );
 
@@ -42,9 +46,11 @@ public class dream_sakura
     {
         IEventBus modEventBus = context.getModEventBus();
 
-        CREATIVE_MODE_TABS.register(modEventBus);
-        RegistryItem.ITEMS.register(modEventBus);
-        RegistryBlock.BLOCKS.register(modEventBus);
+        CREATIVE_MODE_TABS.register(modEventBus);  // 注册创造模式物品栏
+        RegistryItem.ITEMS.register(modEventBus);  // 注册物品
+        RegistryBlock.BLOCKS.register(modEventBus);  // 注册方块
+        RegistryBlockEntity.BLOCK_ENTITY_TYPES.register(modEventBus);  // 注册方块实体
+        RegistrySound.SOUNDS.register(modEventBus);
 
         // 注册自身到服务器和其他感兴趣的游戏事件
         MinecraftForge.EVENT_BUS.register(this);

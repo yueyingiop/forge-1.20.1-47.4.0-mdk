@@ -10,17 +10,15 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class RegistryBlock {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, dream_sakura.MODID);
-    
-    // // 注册发光空气方块
-    // public static final RegistryObject<Block> GLOWING_AIR = BLOCKS.register(
-    //     "glowing_air", 
-    //     () -> new GlowingAirBlock(
-    //         BlockBehaviour.Properties.of()
-    //             .air()
-    //             .noCollission()
-    //             .noLootTable()
-    //             .lightLevel(state -> state.getValue(GlowingAirBlock.LIGHT_LEVEL))
-    //     )
-            
-    // );
+
+    public static final RegistryObject<Block> CRYSTAL = BLOCKS.register(
+        "crystal", 
+        ()-> new AnimatedBlock(
+            BlockBehaviour.Properties.of()
+                .noOcclusion()  // 允许透视
+                .isViewBlocking((state, world, pos) -> false) // 不阻塞视觉
+                .isSuffocating((state, world, pos) -> false)  // 不会令玩家窒息
+                .lightLevel(state -> 7)
+        )
+    );
 }

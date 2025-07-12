@@ -1,0 +1,10 @@
+{
+    "dream_finale_music": {
+        "sounds": [
+            {
+                "name": "dream_sakura:still_alive",
+                "stream": true
+            }
+        ]
+    }
+}

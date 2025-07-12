@@ -7,9 +7,12 @@ import java.util.List;
 import org.lwjgl.glfw.GLFW;
 
 import com.core.dream_sakura.dream_sakura;
+import com.core.dream_sakura.blocks.RegistryBlock;
 import com.core.dream_sakura.enums.DamageType;
 import com.core.dream_sakura.skill.SkillBinding;
+import com.core.dream_sakura.sounds.RegistrySound;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -29,7 +32,7 @@ public class RegistryItem {
     private static final SkillBinding Dream_Final_Skill = new SkillBinding(
         GLFW.GLFW_KEY_K,
         "Dream Finale Skill", 
-        30000, // 冷却120s
+        120000, // 冷却120s
         "dream_finale",
         (player, stack)->{
             player.level().getEntitiesOfClass(
@@ -63,7 +66,8 @@ public class RegistryItem {
             },
             PINK_GLOW,
             List.of(244,206,230), // 粉色工具提示颜色
-            Dream_Final_Skill
+            Dream_Final_Skill,
+            ResourceLocation.fromNamespaceAndPath(dream_sakura.MODID, "dream_finale_music")
         )
     );
 
@@ -83,6 +87,31 @@ public class RegistryItem {
         )
     );
 
+
+
+    // 注册方块物品
+    public static final RegistryObject<Item> CRYSTAL_ITEM = ITEMS.register(
+        "crystal", 
+        () -> new AnimatedBlockItem(
+            "crystal",
+            RegistryBlock.CRYSTAL.get(), 
+            new Item.Properties()
+        )
+    );
+
+    
+    
+    // 注册唱片
+    public static final RegistryObject<Item> TEST_MUSIC_DISC_ITEM = ITEMS.register(
+        "test_music_disc", 
+        () -> new MusicDiscItem(
+            5, 
+            () -> RegistrySound.DREAM_FINALE_MUSIC.get(), 
+            new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 
+            155 * 20 // 时长(tick)
+        )
+    );
+ 
     /**
      * 随时间改变颜色rgb的函数
      * @param steps - 步骤数

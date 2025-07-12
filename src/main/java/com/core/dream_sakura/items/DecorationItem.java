@@ -16,15 +16,20 @@ import com.core.dream_sakura.items.client.IGlowingItem;
 import com.core.dream_sakura.listener.IDamageImmunity;
 import com.core.dream_sakura.skill.SkillBinding;
 import com.core.dream_sakura.skill.SkillRegistry;
+import com.core.dream_sakura.sounds.MusicManager;
 import com.core.dream_sakura.tooltip.TooltipHelper;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -45,6 +50,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     private final float[] glowColor; // 发光颜色
     private final List<Integer> tooltipColor; // 工具提示颜色列表
     private final SkillBinding skillBinding; // 技能绑定
+    private final ResourceLocation musicResource; // 音乐资源
 
 
     /**
@@ -55,6 +61,8 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
      * @param immunityProvider - 伤害免疫提供者
      * @param glowColor - 发光颜色，RGB数组
      * @param tooltipColor - 工具提示颜色，RGB数组
+     * @param skillBinding - 技能绑定
+     * @param musicResource - 音乐资源
     */ 
     public DecorationItem(
         String itemIDString ,
@@ -63,7 +71,8 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         Function<ItemStack, Set<DamageType>> immunityProvider,
         float[] glowColor,
         List<Integer> tooltipColor,
-        SkillBinding skillBinding
+        SkillBinding skillBinding,
+        ResourceLocation musicResource
         )
     {
         super(properties.stacksTo(1));
@@ -73,6 +82,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         this.glowColor = glowColor != null ? glowColor : new float[]{1.0f, 0.84f, 0.0f}; // 默认金色
         this.tooltipColor = tooltipColor != null ? tooltipColor : Collections.emptyList(); // 默认空颜色列表
         this.skillBinding = skillBinding;
+        this.musicResource = musicResource;
 
         SkillRegistry.registerBinding(this.skillBinding);  // 注册技能绑定
     }
@@ -90,7 +100,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
             itemIDString, properties, curioTickCallback, 
             stack -> Collections.emptySet(), 
             new float[]{1.0f, 0.84f, 0.0f}, 
-            null, null
+            null, null, null
         );
     }
 
@@ -108,7 +118,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         this(
             itemIDString, properties, curioTickCallback, 
             stack -> Collections.emptySet(), 
-            glowColor, null, null
+            glowColor, null, null, null
         );
     }
 
@@ -128,7 +138,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
             stack -> Collections.emptySet(), 
             new float[]{1.0f, 0.84f, 0.0f}, 
             colorList, 
-            null
+            null, null
         );
     }
 
@@ -148,7 +158,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
             stack -> Collections.emptySet(), 
             new float[]{1.0f, 0.84f, 0.0f}, 
             null,
-            skillBinding
+            skillBinding, null
         );
     }
 
@@ -240,12 +250,48 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     /**
      * 判断物品是否可以装备
      * - 来自于Curios API
-     * @param slotContext - 物品上下文
+     * @param slotContext - 槽位上下文
      * @param stack - 物品栈
+     * @return - 是否可以装备
      */
     @Override
     public boolean canEquip(SlotContext slotContext, ItemStack stack){
         return "halo".equals(slotContext.identifier());
+    }
+
+    /**
+     * 饰品装备时触发
+     * - 来自于Curios API
+     * @param slotContext - 槽位上下文
+     * @param prevStack - 先前的装饰品栈
+     * @param stack - 装饰品堆栈
+    */
+    @Override
+    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
+        ICurioItem.super.onEquip(slotContext, prevStack, stack);
+
+        if (isPlayingMusic() && slotContext.entity() instanceof Player player) {
+            SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(musicResource);
+            if (sound != null) {
+                MusicManager.playMusicForPlayer(player, sound,true);;
+            }
+        }
+    }
+
+    /**
+     * 饰品取消装备时触发
+     * @param slotContext - 槽位上下文
+     * @param newStack - 新的装饰品堆栈
+     * @param stack - 装饰品堆栈
+    */
+    @Override
+    public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
+        ICurioItem.super.onUnequip(slotContext, newStack, stack);
+        
+        // 当卸下饰品时停止音乐
+        if (isPlayingMusic() && slotContext.entity() instanceof Player player) {
+            MusicManager.stopMusicForPlayer(player);
+        }
     }
 
     /**
@@ -301,11 +347,29 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
 
     /**
      * 获取物品ID
-     * - 来自自定义
+     * - 自定义
      * @return - 物品ID字符串
     */
     public String getItemId(){
         return itemId;
+    }
+
+    /**
+     * 是否存在播放资源
+     * - 自定义
+     * @return - 布尔值
+    */
+    public boolean isPlayingMusic() {
+        return this.musicResource != null;
+    }
+
+    /**
+     * 获取物品播放的音乐资源
+     * - 自定义
+     * @return - 音乐资源
+    */
+    public ResourceLocation getMusicResource() {
+        return this.musicResource;
     }
 
     /**

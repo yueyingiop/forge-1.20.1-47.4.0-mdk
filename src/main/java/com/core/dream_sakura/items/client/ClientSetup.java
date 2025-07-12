@@ -1,9 +1,11 @@
 package com.core.dream_sakura.items.client;
 
 import com.core.dream_sakura.dream_sakura;
+import com.core.dream_sakura.blocks.entity.RegistryBlockEntity;
+import com.core.dream_sakura.blocks.entity.client.AnimatedBlockRender;
 import com.core.dream_sakura.items.RegistryItem;
-// import com.core.dream_sakura.shader.GlowShaderManager;
 
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +27,12 @@ public class ClientSetup {
         CuriosRendererRegistry.register(
             RegistryItem.BASIC_HALO.get(), 
             () -> new GeckoCurioRenderer<>(decorationRenderer)
+        );
+
+
+        BlockEntityRenderers.register(
+            RegistryBlockEntity.ANIMATED_BLOCK_ENTITY.get(),
+            AnimatedBlockRender::new
         );
     }
 
