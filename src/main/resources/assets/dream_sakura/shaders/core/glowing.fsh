@@ -36,8 +36,8 @@ void main() {
     }
 
     // 添加脉动效果
-    float pulse = sin(Time * PulseSpeed) * 0.5 + 0.5;
-    float glowIntensity = edgeFactor * pulse * Intensity;
+    // float pulse = sin(Time * PulseSpeed) * 0.5 + 0.5;
+    // float glowIntensity = edgeFactor * pulse * Intensity;
 
     // 计算距离中心的发光强度
     vec2 center = vec2(0.5, 0.5);
@@ -45,13 +45,14 @@ void main() {
     float centerGlow = 1.0 - smoothstep(0.0, GlowRadius, distToCenter);
 
     // 组合发光效果
-    float finalGlow = max(glowIntensity, centerGlow * 0.7);
+    // float finalGlow = max(glowIntensity, centerGlow * 0.7);
     
     // 发光颜色
-    vec3 glow = GlowColor * finalGlow;
+    // vec3 glow = GlowColor * finalGlow;
     
     // 最终颜色 = 原始颜色 + 发光效果
-    vec3 finalColor = texColor.rgb + glow;
+    // vec3 finalColor = texColor.rgb + glow;
+    vec3 finalColor = texColor.rgb + GlowColor;
     
     // 输出最终颜色
     fragColor = vec4(finalColor, texColor.a);

@@ -1,7 +1,7 @@
 {
   "parent": "builtin/entity",
   "textures": {
-    "particle": "item/texture"
+    "particle": "dream_sakura:item/basic_halo"
   },
   "display": {
     "gui": {

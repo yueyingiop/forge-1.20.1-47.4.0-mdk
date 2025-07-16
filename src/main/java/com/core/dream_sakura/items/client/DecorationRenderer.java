@@ -56,20 +56,24 @@ public class DecorationRenderer extends GeoItemRenderer<DecorationItem> {
                 glowColor = glowingItem.getGlowColor();
                 glowIntensity = glowingItem.getGlowIntensity();
             }
+            // 判读glowColor是否为空列表
+            if (glowColor.length != 0) {
+                // 设置发光颜色
+                RenderSystem.setShaderColor(
+                    glowColor[0], 
+                    glowColor[1], 
+                    glowColor[2], 
+                    glowIntensity
+                );
+                
+                // 渲染发光层
+                super.renderByItem(stack, transformType, poseStack, bufferSource2, fullBrightLight, OverlayTexture.NO_OVERLAY);
+                
+                // 确保立即渲染
+                bufferSource2.endBatch();
+            }
             
-            // 设置发光颜色
-            RenderSystem.setShaderColor(
-                glowColor[0], 
-                glowColor[1], 
-                glowColor[2], 
-                glowIntensity
-            );
             
-            // 渲染发光层
-            super.renderByItem(stack, transformType, poseStack, bufferSource2, fullBrightLight, OverlayTexture.NO_OVERLAY);
-            
-            // 确保立即渲染
-            bufferSource2.endBatch();
         } finally {
             // 恢复状态
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);

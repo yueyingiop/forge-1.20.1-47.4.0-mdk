@@ -15,7 +15,7 @@ description='''
 [[dependencies.dream_sakura]]  # mod依赖,选填
     modId="forge"  # 依赖的modid,必填
     mandatory=true  # 是否必须,必填
-    versionRange="[47,)"  # 依赖的版本范围,必填
+    versionRange="[47.4.0,)"  # 依赖的版本范围,必填
     ordering="NONE"  # 排序,选填
     side="BOTH"  # 端,选填
 

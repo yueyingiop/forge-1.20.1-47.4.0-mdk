@@ -3,7 +3,7 @@ package com.core.dream_sakura.blocks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.core.dream_sakura.blocks.entity.AnimatedBlockEntity;
+import com.core.dream_sakura.blocks.entity.RegistryBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -19,7 +19,7 @@ public class AnimatedBlock extends BaseEntityBlock {
     @Override
     @Nullable
     public BlockEntity newBlockEntity(@Nonnull BlockPos blockPos, @Nonnull BlockState state) {
-        return new AnimatedBlockEntity(blockPos, state);
+        return RegistryBlockEntity.CRYSTAL_ENTITY.get().create(blockPos, state);
     }
 
     @Override

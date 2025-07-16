@@ -102,7 +102,7 @@ public class TooltipHelper {
      * @param Type 类型（"describe" 或 "effect" ）
      * @param colorList 颜色列表（RGB格式）
     */
-    private static void addDetailedTooltip(String itemId, List<Component> tooltip, String Type, List<Integer> colorList) {
+    public static void addDetailedTooltip(String itemId, List<Component> tooltip, String Type, List<Integer> colorList) {
         int line = 1;
         while (true) {
             String key = "tooltip." + dream_sakura.MODID + "." + itemId + "." + Type + ".line" + line;

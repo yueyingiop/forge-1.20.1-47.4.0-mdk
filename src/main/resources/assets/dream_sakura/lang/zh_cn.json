@@ -5,6 +5,7 @@
 
     "tooltip.dream_sakura.shift_prompt": "按住 %s 查看介绍详情",
     "tooltip.dream_sakura.ctrl_prompt": "按住 %s 查看效果详情",
+    
     "item.dream_sakura.dream_finale": "梦幻终序",
     "tooltip.dream_sakura.dream_finale.base": "至此，新序诞生",
     "tooltip.dream_sakura.dream_finale.describe.line1": "在黑暗的世界里弱小是无法生存的,如果无法做出改变，",
@@ -27,5 +28,31 @@
 
     "key.category.dream_sakura.skills": "梦之樱-技能",
     "skill.dream_finale_skill": "梦幻终序技能",
-    "skill.cooldown": "技能冷却中"
+    "skill.cooldown": "技能冷却中",
+    
+    "item.dream_sakura.psionic_scepter": "灵能权柄",
+
+    "block.dream_sakura.crystal" : "水晶",
+    "block.dream_sakura.crystal_black" : "黑色水晶",
+    "block.dream_sakura.crystal_blue" : "蓝色水晶",
+    "block.dream_sakura.crystal_brown" : "棕色水晶",
+    "block.dream_sakura.crystal_cyan" : "青色水晶",
+    "block.dream_sakura.crystal_gray" : "灰色水晶",
+    "block.dream_sakura.crystal_green" : "绿色水晶",
+    "block.dream_sakura.crystal_light_blue" : "淡蓝色水晶",
+    "block.dream_sakura.crystal_light_gray" : "淡灰色水晶",
+    "block.dream_sakura.crystal_lime" : "黄绿色水晶",
+    "block.dream_sakura.crystal_magenta" : "品红色水晶",
+    "block.dream_sakura.crystal_orange" : "橙色水晶",
+    "block.dream_sakura.crystal_pink" : "粉红色水晶",
+    "block.dream_sakura.crystal_purple" : "紫色水晶",
+    "block.dream_sakura.crystal_red" : "红色水晶",
+    "block.dream_sakura.crystal_white" : "白色水晶",
+    "block.dream_sakura.crystal_yellow" : "黄色水晶",
+    "tooltip.dream_sakura.crystal.describe.line1": "作者的话",
+    "tooltip.dream_sakura.crystal.describe.line2": "谁说这是旋转玻璃的!",
+    "tooltip.dream_sakura.crystal.describe.line3": "捏喵喵的,我说是水晶就是水晶!",
+    
+    "item.dream_sakura.test_music_disc" : "音乐唱片",
+    "item.dream_sakura.test_music_disc.desc" : "小瀬村晶 - Still Alive"
 }

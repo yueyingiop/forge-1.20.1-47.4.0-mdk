@@ -18,7 +18,7 @@ public class AnimatedBlockEntity extends BlockEntity implements GeoBlockEntity {
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
     public AnimatedBlockEntity(BlockPos pos, BlockState state) {
-        super(RegistryBlockEntity.ANIMATED_BLOCK_ENTITY.get() ,pos, state);
+        super(RegistryBlockEntity.CRYSTAL_ENTITY.get() ,pos, state);
     }
 
     @Override

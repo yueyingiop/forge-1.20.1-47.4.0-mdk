@@ -21,6 +21,10 @@ public class ClientSetup {
         DecorationRenderer decorationRenderer = new DecorationRenderer();
 
         CuriosRendererRegistry.register(
+            RegistryItem.TEST_HALO.get(), 
+            () -> new GeckoCurioRenderer<>(decorationRenderer)
+        );
+        CuriosRendererRegistry.register(
             RegistryItem.DREAM_FINALE.get(), 
             () -> new GeckoCurioRenderer<>(decorationRenderer)
         );
@@ -29,11 +33,15 @@ public class ClientSetup {
             () -> new GeckoCurioRenderer<>(decorationRenderer)
         );
 
-
+        
+        //#region crystal实体系列
         BlockEntityRenderers.register(
-            RegistryBlockEntity.ANIMATED_BLOCK_ENTITY.get(),
+            RegistryBlockEntity.CRYSTAL_ENTITY.get(),
             AnimatedBlockRender::new
         );
+        //#endregion
+
+
     }
 
 }

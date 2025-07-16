@@ -14,11 +14,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -31,6 +33,7 @@ public class SkillBinding {
     private final BiConsumer<Player, ItemStack> callback; // 回调,技能实现
     private final int cooldown; // 技能冷却时间
     private long lastUsedTime = 0; // 技能最后使用时间
+    @OnlyIn(Dist.CLIENT)
     private Lazy<KeyMapping> keyMapping; // 按键映射
     private boolean isActive = false; // 技能是否激活
     private final String itemId; // 技能物品ID
@@ -41,12 +44,15 @@ public class SkillBinding {
         this.cooldown = cooldownTime;
         this.itemId = itemId;
         this.callback = skillAction;
+        if (FMLEnvironment.dist == Dist.CLIENT) { // 环境检查
+            this.keyMapping = Lazy.of(() -> new KeyMapping(
+                "skill." + this.description.replace(' ', '_').toLowerCase(), // 技能描述
+                this.KeyCode, // 按键码
+                "key.category.dream_sakura.skills" // 技能分类
+            ));
+        }
         
-        this.keyMapping = Lazy.of(() -> new KeyMapping(
-            "skill." + this.description.replace(' ', '_').toLowerCase(), // 技能描述
-            this.KeyCode, // 按键码
-            "key.category.dream_sakura.skills" // 技能分类
-        ));
+        
         
     }
 
@@ -136,7 +142,7 @@ public class SkillBinding {
         if (isWearingBoundItem(player)) {
             ItemStack stack = getBoundItemStack(player);
             callback.accept(player, stack);
-            dream_sakura.LOGGER.info("技能按键是:"+keyMapping.get().getKey().getValue() + keyMapping.get().getKey().getName() + "原来按键是:" + this.KeyCode);
+            // dream_sakura.LOGGER.info("技能按键是:"+keyMapping.get().getKey().getValue() + keyMapping.get().getKey().getName() + "原来按键是:" + this.KeyCode);
         }
     }
 

@@ -1,13 +1,20 @@
 package com.core.dream_sakura.items;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.core.dream_sakura.items.client.AnimatedBlockItemRender;
+import com.core.dream_sakura.tooltip.TooltipHelper;
 
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -68,6 +75,14 @@ public class AnimatedBlockItem extends BlockItem implements GeoItem {
                 return this.render;
             }
         });
+    }
+
+
+    @Override
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        List<Integer> Color = List.of(255,0,0); // 文本颜色
+        TooltipHelper.addDetailedTooltip(itemId, tooltip, "describe", Color);
     }
 
     public String getItemId() {

@@ -79,7 +79,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         this.itemId = itemIDString; // 设置物品ID
         this.curioEquipCallback = curioTickCallback; // 设置装备时的tick回调函数
         this.immunityProvider = immunityProvider; // 设置伤害免疫提供者
-        this.glowColor = glowColor != null ? glowColor : new float[]{1.0f, 0.84f, 0.0f}; // 默认金色
+        this.glowColor = glowColor != null ? glowColor : new float[]{}; // 默认空列表
         this.tooltipColor = tooltipColor != null ? tooltipColor : Collections.emptyList(); // 默认空颜色列表
         this.skillBinding = skillBinding;
         this.musicResource = musicResource;
@@ -114,7 +114,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     */
     public DecorationItem(String itemIDString, Properties properties, 
                          BiConsumer<SlotContext, ItemStack> curioTickCallback,
-                         float[] glowColor, boolean enableLight,int lightLevel) {
+                         float[] glowColor) {
         this(
             itemIDString, properties, curioTickCallback, 
             stack -> Collections.emptySet(), 
@@ -341,6 +341,12 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
                 this.skillBinding.getkeyMapping().get().getKey().getName()
             );
         }
+    }
+
+    // 允许重命名
+    @Override
+    public int getEnchantmentValue() {
+        return 1;
     }
 
 
