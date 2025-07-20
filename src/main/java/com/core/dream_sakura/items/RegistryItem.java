@@ -16,6 +16,8 @@ import com.core.dream_sakura.skill.SkillBinding;
 import com.core.dream_sakura.sounds.RegistrySound;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Abilities;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -101,6 +103,16 @@ public class RegistryItem {
                     // 移除负面效果
                     for (MobEffect effect : effectsToRemove) {
                         entity.removeEffect(effect);
+                    }
+
+                    // 添加飞行效果
+                    if(entity instanceof Player player){
+                        Abilities abilities = player.getAbilities();
+                        abilities.mayfly = true;
+
+                        if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                            serverPlayer.onUpdateAbilities();
+                        }
                     }
                 }
             },
@@ -306,6 +318,16 @@ public class RegistryItem {
         "psionic_scepter",
         () -> new WeaponItem(
             "psionic_scepter", 
+            new Item.Properties()
+                .stacksTo(1)
+                .rarity(Rarity.COMMON)
+        )
+    );
+
+    public static final RegistryObject<Item> ENDER_SLAYER = ITEMS.register(
+        "ender_slayer",
+        () -> new WeaponItem(
+            "ender_slayer", 
             new Item.Properties()
                 .stacksTo(1)
                 .rarity(Rarity.COMMON)

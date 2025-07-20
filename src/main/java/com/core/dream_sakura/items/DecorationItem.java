@@ -23,11 +23,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -270,6 +274,14 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
         ICurioItem.super.onEquip(slotContext, prevStack, stack);
 
+        // 判断是否在客户端
+        if (slotContext.entity().level().isClientSide()) {
+            playClientSound(slotContext);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void playClientSound(SlotContext slotContext) {
         if (isPlayingMusic() && slotContext.entity() instanceof Player player) {
             SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(musicResource);
             if (sound != null) {
@@ -289,8 +301,34 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         ICurioItem.super.onUnequip(slotContext, newStack, stack);
         
         // 当卸下饰品时停止音乐
-        if (isPlayingMusic() && slotContext.entity() instanceof Player player) {
-            MusicManager.stopMusicForPlayer(player);
+        if (slotContext.entity().level().isClientSide()) {
+            if (isPlayingMusic() && slotContext.entity() instanceof Player player) {
+                MusicManager.stopMusicForPlayer(player);
+            }
+        }
+
+        disableMayfly("dream_finale", slotContext);
+    }
+
+    /**
+     * 禁用飞行
+     * - 用于onUnequip函数
+     * @param itemID - 禁用物品ID
+     * @param slotContext - 槽位上下文
+    */
+    public void disableMayfly(String itemID, SlotContext slotContext){
+        if (itemID.equals(this.itemId)) {
+            LivingEntity entity = slotContext.entity();
+            if (entity instanceof Player player && !player.level().isClientSide()) {
+                Abilities abilities = player.getAbilities();
+                if (!player.isCreative()) {
+                    abilities.mayfly = false;
+                    abilities.flying = false;
+                    if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                        serverPlayer.onUpdateAbilities();
+                    }
+                }
+            }
         }
     }
 

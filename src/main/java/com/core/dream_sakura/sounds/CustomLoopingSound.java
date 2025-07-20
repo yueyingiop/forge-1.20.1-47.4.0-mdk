@@ -5,14 +5,17 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class CustomLoopingSound extends AbstractSoundInstance {
-    private final Player player;
+    // private final Player player;
     private final boolean looping;
 
+    @OnlyIn(Dist.CLIENT)
     public CustomLoopingSound(Player player, SoundEvent sound, SoundSource source, boolean loop) {
         super(sound, source, RandomSource.create());
-        this.player = player;
+        // this.player = player;
         this.looping = loop;
         this.volume = 1.0F; // 音量
         this.pitch = 1.0F; // 音调

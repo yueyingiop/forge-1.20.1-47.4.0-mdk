@@ -8,6 +8,7 @@ import com.core.dream_sakura.enums.DamageType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,13 +22,34 @@ public interface IDamageImmunity {
     // 监听器
     @Mod.EventBusSubscriber
     public class ImmunityListener {
+
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
+        public static void onLivingAttack(LivingAttackEvent event) {
+            LivingEntity entity = event.getEntity();
+            DamageSource source = event.getSource();
+            
+            CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
+                List<SlotResult> equippedCurios = handler.findCurios(stack -> true);
+
+                for (SlotResult slotResult : equippedCurios) {
+                    ItemStack stack = slotResult.stack();
+                    if (stack.getItem() instanceof IDamageImmunity immunityItem) {
+                        Set<DamageType> immunities = immunityItem.getImmunities(stack);
+                        if (shouldImmune(immunities, source)) {
+                            event.setCanceled(true);
+                            return;
+                        }
+                    }
+                }
+            });
+        }
+
+
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onLivingHurt(LivingHurtEvent event) {
             LivingEntity entity = event.getEntity(); // 获取受伤实体
             DamageSource source = event.getSource(); // 获取伤害来源
             CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
-                // AtomicBoolean shouldCancel = new AtomicBoolean(false); // 用来判断是否取消伤害
-
                 // 遍历饰品
                 List<SlotResult> equippedCurios  = handler.findCurios(stack -> true);
 
@@ -39,13 +61,14 @@ public interface IDamageImmunity {
                         // 检查伤害来源是否在免疫列表中
                         if (shouldImmune(immunities, source)) {
                             event.setCanceled(true);
-                            break;
+                            return;
                         }
                         
                     }
                 }
             });
         }
+
         /**
          * 检查伤害来源是否在免疫列表中
          * 

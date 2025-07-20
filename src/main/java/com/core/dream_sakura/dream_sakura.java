@@ -65,6 +65,7 @@ public class dream_sakura
             output.accept(RegistryItem.CRYSTAL_YELLOW_ITEM.get());
             output.accept(RegistryItem.TEST_MUSIC_DISC_ITEM.get());
             output.accept(RegistryItem.PSIONIC_SCEPTER.get());
+            output.accept(RegistryItem.ENDER_SLAYER.get());
         }).build()
     );
 
