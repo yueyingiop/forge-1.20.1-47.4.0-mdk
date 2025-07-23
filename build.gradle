@@ -138,12 +138,12 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
-    // 添加仓库
+    // 添加仓库:饰品
     maven {
         name = "Illusive Soulworks maven"
         url = "https://maven.theillusivec4.top/"
     }
-    // 添加仓库
+    // 添加仓库:基岩版动画
     maven {
         name = 'GeckoLib'
         url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
@@ -151,6 +151,20 @@ repositories {
                 includeGroupByRegex("software\\.bernie.*")
                 includeGroup("com.eliotlash.mclib")
         }
+    }
+    // 添加仓库:铁魔法
+    maven {
+        name = "Iron's Maven - Release"
+        url = "https://code.redspace.io/releases"
+    }
+    maven {
+        name = "Iron's Maven - Snapshots"
+        url = "https://code.redspace.io/snapshots"
+    }
+    // 添加仓库:KosmX(人物动画)
+    maven {
+        name "KosmX's maven"
+        url 'https://maven.kosmx.dev/'
     }
 }
 
@@ -166,10 +180,19 @@ dependencies {
     compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:5.12.0+1.20.1:api"))
     // 运行时使用完整的 Curios API jar
     runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:5.12.0+1.20.1"))
+    // 运行时使用 Caelus API jar
+    compileOnly(fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}:api"))
+    runtimeOnly(fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}"))
     // 运行时使用 Curios API jar
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}")
     // 运行时使用 MCLib
     implementation("com.eliotlash.mclib:mclib:20")
+    // 运行时使用 Iron's Spellbooks API
+    compileOnly(fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api"))
+    runtimeOnly(fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}"))
+    // 运行时使用 KosmX's Player Animations
+    implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${player_animation_version}")
+
 
     // JEI 示例 mod 依赖 - 使用 fg.deobf() 可确保依赖被 remap 到你的开发映射
     // JEI API 仅在编译时使用，完整 JEI 构件在运行时使用
