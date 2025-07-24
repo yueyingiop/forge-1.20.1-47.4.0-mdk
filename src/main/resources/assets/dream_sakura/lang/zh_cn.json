@@ -49,9 +49,8 @@
     "block.dream_sakura.crystal_red" : "红色水晶",
     "block.dream_sakura.crystal_white" : "白色水晶",
     "block.dream_sakura.crystal_yellow" : "黄色水晶",
-    "tooltip.dream_sakura.crystal.describe.line1": "作者的话",
-    "tooltip.dream_sakura.crystal.describe.line2": "谁说这是旋转玻璃的!",
-    "tooltip.dream_sakura.crystal.describe.line3": "捏喵喵的,我说是水晶就是水晶!",
+    "tooltip.dream_sakura.crystal.describe.line1": "谁说这是旋转玻璃的!",
+    "tooltip.dream_sakura.crystal.describe.line2": "捏喵喵的,我说是水晶就是水晶!",
     
     "item.dream_sakura.test_music_disc" : "音乐唱片",
     "item.dream_sakura.test_music_disc.desc" : "小瀬村晶 - Still Alive"

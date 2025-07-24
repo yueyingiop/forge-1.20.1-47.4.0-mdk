@@ -19,19 +19,20 @@ public class ForgeEventSubscriber {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void onCurioEquip(CurioChangeEvent event) {
-        dream_sakura.LOGGER.info("[DEBUG] CurioEquipEvent" + event.getTo().getItem().getDescription().getString());
+        // dream_sakura.LOGGER.info("[DEBUG] CurioEquipEvent" + event.getTo().getItem().getDescription().getString());
         if (FMLEnvironment.dist != Dist.CLIENT) return;
         if (event.getEntity() instanceof Player player && event.getTo().getItem() instanceof DecorationItem item) {
-            dream_sakura.LOGGER.info("[DEBUG] Equipping music item" + item.getItemId());
-            dream_sakura.LOGGER.info("[DEBUG] player ID" + player.getName());
+            // dream_sakura.LOGGER.info("[DEBUG] Equipping music item" + item.getItemId());
+            // dream_sakura.LOGGER.info("[DEBUG] player ID" + player.getName());
             if (item.isPlayingMusic()) {
                 SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(item.getMusicResource());
                 if (sound != null) {
-                    dream_sakura.LOGGER.info("[DEBUG] Playing music" + sound.getLocation());
+                    // dream_sakura.LOGGER.info("[DEBUG] Playing music" + sound.getLocation());
                     MusicManager.playMusicForPlayer(player, sound, true);
-                } else {
-                   dream_sakura.LOGGER.info("[DEBUG] Music resource not found" + item.getMusicResource()); 
                 }
+                // else {
+                //    dream_sakura.LOGGER.info("[DEBUG] Music resource not found" + item.getMusicResource()); 
+                // }
             }
         }
     }

@@ -1,8 +1,8 @@
 // mixins 插件
 buildscript {
-        repositories {
-                maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        }
+    repositories {
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    }
 }
 
 plugins {
@@ -11,6 +11,11 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.spongepowered.mixin' version '0.7.+'
+}
+
+mixin {
+    add sourceSets.main, "dream_sakura.refmap.json"
+    config 'mixin.dream_sakura.json'
 }
 
 version = mod_version
@@ -188,11 +193,13 @@ dependencies {
     // 运行时使用 MCLib
     implementation("com.eliotlash.mclib:mclib:20")
     // 运行时使用 Iron's Spellbooks API
-    compileOnly(fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api"))
-    runtimeOnly(fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}"))
+    // compileOnly(fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api"))
+    implementation(fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}"))
     // 运行时使用 KosmX's Player Animations
     implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${player_animation_version}")
 
+    implementation 'org.spongepowered:mixin:0.8.5'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // JEI 示例 mod 依赖 - 使用 fg.deobf() 可确保依赖被 remap 到你的开发映射
     // JEI API 仅在编译时使用，完整 JEI 构件在运行时使用

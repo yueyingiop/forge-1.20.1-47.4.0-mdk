@@ -3,6 +3,7 @@
     "minecraft:player"
   ],
   "slots": [
-    "halo"
+    "halo",
+    "head"
   ]
 }

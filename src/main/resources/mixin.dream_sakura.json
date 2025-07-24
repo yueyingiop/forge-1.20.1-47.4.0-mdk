@@ -1,0 +1,10 @@
+{
+    "required": true,
+    "package": "com.core.dream_sakura.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "dream_sakura.refmap.json",
+    "mixins": [
+        "IronCrownItemMixin"
+    ],
+    "minVersion": "0.8.5"
+}
