@@ -6,11 +6,11 @@ import java.util.function.BiConsumer;
 
 import com.core.dream_sakura.dream_sakura;
 import com.core.dream_sakura.items.DecorationItem;
+import com.core.dream_sakura.network.PacketHandler;
+import com.core.dream_sakura.network.SkillTriggerPacket;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -64,43 +64,62 @@ public class SkillBinding {
         return keyMapping;
     }
 
-
-    @Mod.EventBusSubscriber(modid = dream_sakura.MODID)
-    public static class ForgeEvents {
-        @SubscribeEvent
-        public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-            if (event.phase == TickEvent.Phase.START && !event.player.level().isClientSide) {
-                for (SkillBinding binding : SkillRegistry.getBindings()) {
-                    
-                    if (!binding.isWearingBoundItem(event.player)) {
-                        binding.isActive = false;
-                        continue; // 未佩戴饰品，跳过处理
-                    }
-                    
-                    if (binding.isActive && binding.isCooledDown()) {
-                        binding.triggerSkill(event.player);
-                        binding.lastUsedTime = System.currentTimeMillis();
-                        binding.isActive = false;
-                    } else if (binding.isActive && !binding.isCooledDown()) {
-                        // 显示技能冷却中
-                        long remaining = binding.cooldown - (System.currentTimeMillis() - binding.lastUsedTime);
-                        long seconds = remaining / 1000;
-                        long milliseconds = remaining % 1000;
-                        Component message = Component.translatable("skill.cooldown")
-                            .append(": ")
-                            .append(
-                                Component.literal(
-                                    String.format("%d.%03ds", seconds, milliseconds))
-                                    .withStyle(ChatFormatting.RED
-                                )
-                            );
-                        event.player.displayClientMessage(message, true);
-                        binding.isActive = false; // 重置激活状态
-                    }
-                }
-            }
-        }
+    public String getItemId(){
+        return itemId;
     }
+
+    public int getCooldown() {
+        return cooldown;
+    }
+
+    public long getLastUsedTime() {
+        return lastUsedTime;
+    }
+
+    public void setLastUsedTime(long time) {
+        this.lastUsedTime = time;
+    }
+
+
+
+
+    // // 服务器玩家每tick检查
+    // @Mod.EventBusSubscriber(modid = dream_sakura.MODID)
+    // public static class ForgeEvents {
+    //     @SubscribeEvent
+    //     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+    //         if (event.phase == TickEvent.Phase.START && !event.player.level().isClientSide) {
+    //             for (SkillBinding binding : SkillRegistry.getBindings()) {
+                    
+    //                 if (!binding.isWearingBoundItem(event.player)) {
+    //                     binding.isActive = false;
+    //                     continue; // 未佩戴饰品，跳过处理
+    //                 }
+                    
+    //                 if (binding.isActive && binding.isCooledDown()) {
+    //                     binding.triggerSkill(event.player);
+    //                     binding.lastUsedTime = System.currentTimeMillis();
+    //                     binding.isActive = false;
+    //                 } else if (binding.isActive && !binding.isCooledDown()) {
+    //                     // 显示技能冷却中
+    //                     long remaining = binding.cooldown - (System.currentTimeMillis() - binding.lastUsedTime);
+    //                     long seconds = remaining / 1000;
+    //                     long milliseconds = remaining % 1000;
+    //                     Component message = Component.translatable("skill.cooldown")
+    //                         .append(": ")
+    //                         .append(
+    //                             Component.literal(
+    //                                 String.format("%d.%03ds", seconds, milliseconds))
+    //                                 .withStyle(ChatFormatting.RED
+    //                             )
+    //                         );
+    //                     event.player.displayClientMessage(message, true);
+    //                     binding.isActive = false; // 重置激活状态
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
 
 
@@ -123,6 +142,7 @@ public class SkillBinding {
                         Player player = Minecraft.getInstance().player;
                         if (player != null && binding.isWearingBoundItem(player)) {
                             if (binding.keyMapping.get().isDown()) {
+                                PacketHandler.sendToServer(new SkillTriggerPacket(binding.getItemId()));
                                 binding.isActive = true;
                             }
                         } else {
@@ -147,7 +167,7 @@ public class SkillBinding {
     }
 
     // 检查玩家是否佩戴了绑定的饰品
-    private boolean isWearingBoundItem(Player player) {
+    public boolean isWearingBoundItem(Player player) {
         Optional<ICuriosItemHandler> curiosHandler = CuriosApi.getCuriosInventory(player).resolve();
         if (curiosHandler.isPresent()) {
             Map<String, ICurioStacksHandler> stacksHandlers = curiosHandler.get().getCurios();

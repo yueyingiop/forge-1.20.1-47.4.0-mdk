@@ -10,6 +10,7 @@ import com.core.dream_sakura.blocks.RegistryBlock;
 import com.core.dream_sakura.blocks.entity.RegistryBlockEntity;
 import com.core.dream_sakura.format.TrueRGBSimpleRenderer;
 import com.core.dream_sakura.items.RegistryItem;
+import com.core.dream_sakura.network.PacketHandler;
 import com.core.dream_sakura.sounds.RegistrySound;
 
 import net.minecraft.client.Minecraft;
@@ -81,6 +82,7 @@ public class dream_sakura
 
         // 注册自身到服务器和其他感兴趣的游戏事件
         MinecraftForge.EVENT_BUS.register(this);
+        PacketHandler.register();
 
         // 注册我们 mod 的 ForgeConfigSpec，以便 Forge 能创建和加载配置文件
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);

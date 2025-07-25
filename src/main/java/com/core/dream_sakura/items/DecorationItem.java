@@ -14,14 +14,14 @@ import com.core.dream_sakura.enums.DamageType;
 import com.core.dream_sakura.items.client.DecorationRenderer;
 import com.core.dream_sakura.items.client.IGlowingItem;
 import com.core.dream_sakura.listener.IDamageImmunity;
+import com.core.dream_sakura.network.PacketHandler;
+import com.core.dream_sakura.network.PlayMusicPacket;
 import com.core.dream_sakura.skill.SkillBinding;
 import com.core.dream_sakura.skill.SkillRegistry;
-import com.core.dream_sakura.sounds.MusicManager;
 import com.core.dream_sakura.tooltip.TooltipHelper;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Abilities;
@@ -30,10 +30,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -274,24 +271,15 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
         ICurioItem.super.onEquip(slotContext, prevStack, stack);
 
-        // 判断是否在客户端
-        if (slotContext.entity().level().isClientSide()) {
-            playClientSound(slotContext);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void playClientSound(SlotContext slotContext) {
-        if (isPlayingMusic() && slotContext.entity() instanceof Player player) {
-            SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(musicResource);
-            if (sound != null) {
-                MusicManager.playMusicForPlayer(player, sound,true);;
-            }
+        // 音乐播放
+        if (!slotContext.entity().level().isClientSide() && isPlayingMusic()) {
+            PacketHandler.sendToServer(new PlayMusicPacket(this.musicResource, true));
         }
     }
 
     /**
      * 饰品取消装备时触发
+     * - 来自于Curios API
      * @param slotContext - 槽位上下文
      * @param newStack - 新的装饰品堆栈
      * @param stack - 装饰品堆栈
@@ -301,10 +289,8 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         ICurioItem.super.onUnequip(slotContext, newStack, stack);
         
         // 当卸下饰品时停止音乐
-        if (slotContext.entity().level().isClientSide()) {
-            if (isPlayingMusic() && slotContext.entity() instanceof Player player) {
-                MusicManager.stopMusicForPlayer(player);
-            }
+        if (!slotContext.entity().level().isClientSide() && isPlayingMusic()) {
+            PacketHandler.sendToServer(new PlayMusicPacket(this.musicResource, false));
         }
 
         disableMayfly("dream_finale", slotContext);

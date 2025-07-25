@@ -7,7 +7,7 @@ modId="dream_sakura"  # modid,必填
 version="0.0.1"  # mod版本,必填
 displayName="梦之樱"  # mod显示名称,必填
 # logoFile="pack.png"  # mod图标,选填
-authors="yueyingiop"  # mod作者,选填
+authors="yueyingiop,XiaoArin"  # mod作者,选填
 description='''
 至此，新序诞生
 '''  # mod描述,必填

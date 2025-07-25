@@ -5,11 +5,14 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class MusicManager {
     public static final Map<Player, SoundInstance> activeMusic = new HashMap<>(); // 播放中的音乐
@@ -17,6 +20,7 @@ public class MusicManager {
     @OnlyIn(Dist.CLIENT)
     public static void playMusicForPlayer(Player player, SoundEvent sound, Boolean loop) {
         if (player == null || sound == null) return;
+        if (player != Minecraft.getInstance().player) return;
 
         if (activeMusic.containsKey(player)) {
             stopMusicForPlayer(player);
@@ -42,5 +46,19 @@ public class MusicManager {
             Minecraft.getInstance().getSoundManager().stop(music);
         }
         activeMusic.remove(player);
+    }
+
+    // 发包,用于服务器
+    public static void handleMusicPacket(ResourceLocation musicResource, boolean play, Player player) {
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(musicResource);
+            if (sound != null) {
+                if (play) {
+                    playMusicForPlayer(player, sound, true);
+                } else {
+                    stopMusicForPlayer(player);
+                }
+            }
+        });
     }
 }

@@ -19,13 +19,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -41,25 +40,22 @@ public class RegistryItem {
 
     // 技能
     private static final Supplier<SkillBinding> Dream_Final_Skill = ()->{
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            return new SkillBinding(
-                GLFW.GLFW_KEY_K,
-                "Dream Finale Skill", 
-                Config.dreamFinaleCooldown, // 冷却120s
-                "dream_finale",
-                (player, stack)->{
-                    player.level().getEntitiesOfClass(
-                        LivingEntity.class, 
-                        player.getBoundingBox().inflate(36.0)
-                    ).forEach(entity -> {
-                        if (entity != player) { // 排除玩家自身
-                            entity.discard(); // 删除实体
-                        }
-                    });
-                }
-            );
-        }
-        return null;
+        return new SkillBinding(
+            GLFW.GLFW_KEY_K,
+            "Dream Finale Skill", 
+            Config.dreamFinaleCooldown, // 冷却120s
+            "dream_finale",
+            (player, stack)->{
+                player.level().getEntitiesOfClass(
+                    LivingEntity.class, 
+                    player.getBoundingBox().inflate(36.0)
+                ).forEach(entity -> {
+                    if (entity != player) { // 排除玩家自身
+                        entity.discard(); // 删除实体
+                    }
+                });
+            }
+        );
     };
     
     
@@ -113,6 +109,19 @@ public class RegistryItem {
                         if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
                             serverPlayer.onUpdateAbilities();
                         }
+                    }
+
+                    // 生命值低于10给予生命回复效果
+                    if (entity.getHealth() < 10) {
+                        MobEffectInstance regeneration = new MobEffectInstance(
+                            MobEffects.REGENERATION,  // 生命回复效果
+                            100,             // 持续时间：20 ticks
+                            9,              // 效果等级
+                            false,          // 是否显示粒子
+                            true,           // 是否显示图标
+                            true            // 环境效果是否可见
+                        );
+                        entity.addEffect(regeneration);
                     }
                 }
             },
