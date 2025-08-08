@@ -14,6 +14,8 @@ import com.core.dream_sakura.blocks.RegistryBlock;
 import com.core.dream_sakura.enums.DamageType;
 import com.core.dream_sakura.skill.SkillBinding;
 import com.core.dream_sakura.sounds.RegistrySound;
+// import com.mega.uom.util.entity.EntityASMUtil;
+import com.core.dream_sakura.util.EntityDataCleaner;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Abilities;
@@ -29,6 +31,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+
+
 public class RegistryItem {
     // 创建注册器
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, dream_sakura.MODID);
@@ -37,7 +41,7 @@ public class RegistryItem {
     private static final float[] NULL_GLOW = {}; // 无色
     private static final float[] PINK_GLOW = {0.956863f,0.807843f,0.901961f}; // 粉色
     private static final float[] GOLD_GLOW = {0.956863f,0.992157f,0.329412f}; // 金色
-
+    
     // 技能
     private static final Supplier<SkillBinding> Dream_Final_Skill = ()->{
         return new SkillBinding(
@@ -74,6 +78,17 @@ public class RegistryItem {
             NULL_GLOW
         )
     );
+    public static final RegistryObject<Item> RGB_HALO = ITEMS.register(
+        "rgb_halo", 
+        () -> new DecorationItem(
+            "rgb_halo",
+            new Item.Properties()
+            .stacksTo(1)
+            .rarity(Rarity.UNCOMMON),
+            (slotContext, stack) ->{},
+            NULL_GLOW
+        )
+    );
     
     public static final RegistryObject<Item> DREAM_FINALE = ITEMS.register(
         "dream_finale", 
@@ -84,7 +99,8 @@ public class RegistryItem {
             .rarity(Rarity.UNCOMMON),
             (slotContext, stack) ->{
                 LivingEntity entity = slotContext.entity();
-                
+                EntityDataCleaner.cleanEntityData(entity); // 清除实体数据(不管用)
+
                 // 每tick移除所有效果
                 if (!entity.level().isClientSide()){
                     // 检测正在活动的负面效果
@@ -105,17 +121,20 @@ public class RegistryItem {
                     if(entity instanceof Player player){
                         Abilities abilities = player.getAbilities();
                         abilities.mayfly = true;
+                        abilities.invulnerable = true; // 无敌
 
                         if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
                             serverPlayer.onUpdateAbilities();
                         }
+                        
                     }
-
-                    // 生命值低于10给予生命回复效果
-                    if (entity.getHealth() < 10) {
+                    
+                    // 生命值低于50%给予生命回复效果
+                    if (entity.getHealth() < (entity.getMaxHealth()/2)) {
+                        
                         MobEffectInstance regeneration = new MobEffectInstance(
                             MobEffects.REGENERATION,  // 生命回复效果
-                            100,             // 持续时间：20 ticks
+                            100,             // 持续时间：100 ticks
                             9,              // 效果等级
                             false,          // 是否显示粒子
                             true,           // 是否显示图标

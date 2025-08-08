@@ -16,7 +16,7 @@ public class RegistryBlock {
         "crystal", 
         ()-> new AnimatedBlock(
             BlockBehaviour.Properties.of()
-                .noOcclusion()
+                .noOcclusion() // 不遮挡光照
                 .isViewBlocking((state, world, pos) -> false) // 不阻塞视觉
                 .isSuffocating((state, world, pos) -> false)  // 不会令玩家窒息
                 .lightLevel(state -> 7)

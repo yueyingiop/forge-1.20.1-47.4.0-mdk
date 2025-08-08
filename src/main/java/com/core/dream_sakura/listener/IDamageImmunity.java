@@ -60,7 +60,8 @@ public interface IDamageImmunity {
                         Set<DamageType> immunities = immunityItem.getImmunities(stack);
                         // 检查伤害来源是否在免疫列表中
                         if (shouldImmune(immunities, source)) {
-                            event.setCanceled(true);
+                            event.setAmount(0.0F); // 伤害设置为0
+                            event.setCanceled(true); // 阻止伤害
                             return;
                         }
                         

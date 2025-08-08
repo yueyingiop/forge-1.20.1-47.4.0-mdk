@@ -3,6 +3,13 @@ buildscript {
     repositories {
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
     }
+    // repositories {
+    //     maven { url = "https://repo.spongepowered.org/maven" }
+    //     mavenCentral()
+    // }
+    // dependencies {
+    //     classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    // }
 }
 
 plugins {
@@ -96,6 +103,7 @@ minecraft {
                     source sourceSets.main
                 }
             }
+            jvmArg '-Dfantasy_ending.log_dir=./run/logs/uom'
         }
 
         client {
@@ -140,9 +148,9 @@ repositories {
 
     // 如果你有 mod jar 依赖放在 ./libs，可以像下面这样声明仓库。
     // 详见：https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
-    // flatDir {
-    //     dir 'libs'
-    // }
+    flatDir {
+        dir 'libs'
+    }
     // 添加仓库:饰品
     maven {
         name = "Illusive Soulworks maven"
@@ -171,6 +179,10 @@ repositories {
         name "KosmX's maven"
         url 'https://maven.kosmx.dev/'
     }
+    // 添加仓库:CurseForge
+    maven {
+        url "https://cursemaven.com"
+    }
 }
 
 dependencies {
@@ -197,6 +209,37 @@ dependencies {
     implementation(fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}"))
     // 运行时使用 KosmX's Player Animations
     implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${player_animation_version}")
+
+    // implementation fg.deobf("blank:fantasy_ending-1.20.1:2.7.19b")
+    // implementation fg.deobf("curse.maven:DamageIndicators-1003431:5268035")
+    implementation fg.deobf("curse.maven:goety-586095:6778940")
+    implementation fg.deobf("curse.maven:goety-revelation-1236817:6791619")
+    // implementation fg.deobf("curse.maven:Patchouli-306770:4966125")
+    // implementation fg.deobf("curse.maven:MobBattle-268746:5300817")
+    // implementation fg.deobf("curse.maven:FarmersDelight-398521:5051242")
+    // implementation fg.deobf("curse.maven:Oculus-581495:5299671")
+    // implementation fg.deobf("curse.maven:Xenon-564239:5752040")
+    // implementation fg.deobf("curse.maven:Citadel-331936:5633260")
+    implementation fg.deobf("curse.maven:IBE-256822:4994072")
+    // implementation fg.deobf("curse.maven:Cataclysm-551586:5924796")
+    // implementation fg.deobf("curse.maven:Lionfish-1001614:5922047")
+    // implementation fg.deobf("curse.maven:SlashBladeRe-1022428:5957105")
+    // implementation fg.deobf("curse.maven:SB_JAB-310187:5957114")
+    // implementation fg.deobf("curse.maven:LodestoneLib-616457:5929869")
+    // implementation fg.deobf("curse.maven:Auroras-1105290:5909718")
+    // implementation fg.deobf("curse.maven:ClassicBar-317642:5983897")
+    // implementation fg.deobf("curse.maven:mutil-351914:4824501")
+    // implementation fg.deobf("curse.maven:Tetra-289712:5236744")
+    // implementation fg.deobf("curse.maven:IAF-264231:5633453")
+    // implementation fg.deobf("curse.maven:L2Hos-909207:5799378")
+    // implementation fg.deobf("curse.maven:L2L-620203:5775648")
+    // implementation fg.deobf("curse.maven:L2Art-659547:5797320")
+    // implementation fg.deobf("curse.maven:L2Com-758349:5564677")
+    // implementation fg.deobf("curse.maven:GuardVillagers-360203:6066968")
+    // implementation fg.deobf("curse.maven:EnigmaticLegacy-336184:5600004")
+    // implementation fg.deobf("curse.maven:EnchantmentDescriptions-250419:5855251")
+    // implementation fg.deobf("curse.maven:bookshelf-228525:5423987")
+    
 
     implementation 'org.spongepowered:mixin:0.8.5'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

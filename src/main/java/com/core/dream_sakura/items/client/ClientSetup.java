@@ -21,6 +21,11 @@ public class ClientSetup {
         DecorationRenderer decorationRenderer = new DecorationRenderer();
 
         CuriosRendererRegistry.register(
+            RegistryItem.RGB_HALO.get(), 
+            () -> new GeckoCurioRenderer<>(decorationRenderer)
+        );
+
+        CuriosRendererRegistry.register(
             RegistryItem.TEST_HALO.get(), 
             () -> new GeckoCurioRenderer<>(decorationRenderer)
         );

@@ -273,7 +273,10 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
 
         // 音乐播放
         if (!slotContext.entity().level().isClientSide() && isPlayingMusic()) {
-            PacketHandler.sendToServer(new PlayMusicPacket(this.musicResource, true));
+            PacketHandler.sendToClientsTrackingEntity(
+                new PlayMusicPacket(this.musicResource, true),
+                slotContext.entity()
+            );
         }
     }
 
@@ -290,14 +293,17 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
         
         // 当卸下饰品时停止音乐
         if (!slotContext.entity().level().isClientSide() && isPlayingMusic()) {
-            PacketHandler.sendToServer(new PlayMusicPacket(this.musicResource, false));
+            PacketHandler.sendToClientsTrackingEntity(
+                new PlayMusicPacket(this.musicResource, false),
+                slotContext.entity()
+            );
         }
 
         disableMayfly("dream_finale", slotContext);
     }
 
     /**
-     * 禁用飞行
+     * 禁用能力
      * - 用于onUnequip函数
      * @param itemID - 禁用物品ID
      * @param slotContext - 槽位上下文
@@ -310,6 +316,7 @@ public class DecorationItem extends Item implements ICurioItem, GeoItem, IDamage
                 if (!player.isCreative()) {
                     abilities.mayfly = false;
                     abilities.flying = false;
+                    abilities.invulnerable = false;
                     if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
                         serverPlayer.onUpdateAbilities();
                     }

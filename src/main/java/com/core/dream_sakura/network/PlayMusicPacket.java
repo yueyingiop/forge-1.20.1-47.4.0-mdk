@@ -9,6 +9,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -42,20 +45,30 @@ public class PlayMusicPacket {
                 PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player);
                 PacketHandler.INSTANCE.send(target, packet);
             } else {
-                // 客户端处理
-                Player player = Minecraft.getInstance().player;
-                if (player == null) return;
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, ()->()->{
+                    ClientHandler.handleClientPacket(packet);
+                });
                 
-                if (packet.play) {
-                    SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(packet.musicResource);
-                    if (sound != null) {
-                        MusicManager.playMusicForPlayer(player, sound, true);
-                    }
-                } else {
-                    MusicManager.stopMusicForPlayer(player);
-                }
             }
         });
         ctx.get().setPacketHandled(true);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static class ClientHandler {
+        public static void handleClientPacket(PlayMusicPacket packet) {
+            Player player = Minecraft.getInstance().player;
+            if (player == null)
+                return;
+
+            if (packet.play) {
+                SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(packet.musicResource);
+                if (sound != null) {
+                    MusicManager.playMusicForPlayer(player, sound, true);
+                }
+            } else {
+                MusicManager.stopMusicForPlayer(player);
+            }
+        }
     }
 }

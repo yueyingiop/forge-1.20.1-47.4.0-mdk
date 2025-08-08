@@ -20,7 +20,7 @@ public class CustomLoopingSound extends AbstractSoundInstance {
         this.volume = 1.0F; // 音量
         this.pitch = 1.0F; // 音调
         this.attenuation = Attenuation.LINEAR; // 线性衰减
-        this.relative = true; // 相对位置
+        this.relative = false; // 绝对位置
         this.delay = 0; // 延迟时间
 
         updatePosition();

@@ -4,7 +4,9 @@
     "compatibilityLevel": "JAVA_17",
     "refmap": "dream_sakura.refmap.json",
     "mixins": [
-        "IronCrownItemMixin"
+        "IronCrownItemMixin",
+        "PlayerFlightMixin",
+        "LivingEntityMixin"
     ],
     "minVersion": "0.8.5"
 }

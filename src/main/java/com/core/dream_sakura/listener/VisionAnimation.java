@@ -7,7 +7,7 @@ import com.core.dream_sakura.Config;
 import com.core.dream_sakura.items.DecorationItem;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
@@ -58,8 +58,10 @@ public class VisionAnimation {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void onRenderOverlay(RenderGuiOverlayEvent event) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null) return;
+        if (Minecraft.getInstance().level == null) return; // 确保游戏世界已加载
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return; // 确保玩家实体存在
+        
         // ItemAttribute test = parseItemAttribute(Config.visualAnimation.get(0));
         // dream_sakura.LOGGER.info("[DEBUG]"+test.itemId+test.attributes);
 
